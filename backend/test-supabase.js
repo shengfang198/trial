@@ -23,6 +23,19 @@ async function testSupabase() {
       console.log('✅ Subscribers table accessible:', subscribers);
     }
 
+    // Test inserting a sample email
+    const testEmail = 'sample@example.com';
+    console.log(`\nTesting subscription insert with email: ${testEmail}`);
+    const { data: insertData, error: insertError } = await supabase
+      .from('subscribers')
+      .insert([{ email: testEmail }]);
+
+    if (insertError) {
+      console.log('⚠️  Insert failed (may be due to duplicate or RLS):', insertError.message);
+    } else {
+      console.log('✅ Sample email inserted successfully:', insertData);
+    }
+
   } catch (err) {
     console.error('❌ Supabase connection failed:', err.message);
   }
