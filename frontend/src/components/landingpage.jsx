@@ -9,7 +9,7 @@ const LandingPage = () => {
     if (!email) return;
 
     try {
-      const response = await fetch('https://shengfang198.github.io/test/', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/subscribe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
