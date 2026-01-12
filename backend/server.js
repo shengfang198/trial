@@ -3,7 +3,12 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createClient } from '@supabase/supabase-js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -13,6 +18,7 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANO
 app.use(cors());
 app.use(express.json());
 
+// API routes
 app.get('/', (req, res) => {
   res.send('Hello World from backend!');
 });
@@ -43,6 +49,14 @@ app.post('/subscribe', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Serve static files from the React app build directory
+app.use(express.static('public'));
+
+// Catch all handler: send back React's index.html file for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3001;
